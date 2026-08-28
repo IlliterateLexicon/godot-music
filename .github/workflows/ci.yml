@@ -1,0 +1,22 @@
+name: Build tester
+
+on:
+  push:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: croconut/godot-multi-builder@v1
+      with:
+        names: "Android"
+
+    - run: |
+          unzip ./tester/build/builds.zip
+          git config user.email github-actions@github.com
+          git config user.name github-actions
+          git add ./build/*
+          git reset -- ./build/builds.zip
+          git commit -m 'builds generated'
+          git push --force
